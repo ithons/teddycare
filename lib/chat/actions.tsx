@@ -49,8 +49,6 @@ async function submitUserMessage(content: string) {
   const metadata = session.sessionClaims?.metadata
   const userRole = session.orgSlug === 'doctor' ? 'doctor' : 'patient'
 
-  console.log(JSON.stringify(session))
-
   // Fetch user data
 
   aiState.update({
@@ -137,55 +135,6 @@ export const AI = createAI<AIState, UIState>({
   },
   initialUIState: [],
   initialAIState: { chatId: nanoid(), messages: [] }
-  //
-  // SET AND SAVE CHATS HERE
-  //
-  //
-  // onGetUIState: async () => {
-  //   'use server'
-
-  //   const session = await auth()
-
-  //   if (session && session.user) {
-  //     const aiState = getAIState() as Chat
-
-  //     if (aiState) {
-  //       const uiState = getUIStateFromAIState(aiState)
-  //       return uiState
-  //     }
-  //   } else {
-  //     return
-  //   }
-  // },
-  // onSetAIState: async ({ state }) => {
-  //   'use server'
-
-  //   const session = await auth()
-
-  //   if (session && session.user) {
-  //     const { chatId, messages } = state
-
-  //     const createdAt = new Date()
-  //     const userId = session.user.id as string
-  //     const path = `/chat/${chatId}`
-
-  //     const firstMessageContent = messages[0].content as string
-  //     const title = firstMessageContent.substring(0, 100)
-
-  //     const chat: Chat = {
-  //       id: chatId,
-  //       title,
-  //       userId,
-  //       createdAt,
-  //       messages,
-  //       path
-  //     }
-
-  //     await saveChat(chat)
-  //   } else {
-  //     return
-  //   }
-  // }
 })
 
 export const getUIStateFromAIState = (aiState: Chat) => {

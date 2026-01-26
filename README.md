@@ -1,56 +1,286 @@
-<a href="https://teddycare.vercel.app/">
-  <h1 align="center">TeddyCare</h1>
-</a>
+# TeddyCare
 
 <p align="center">
-  An AI-powered healthcare assistant built with Next.js, the Vercel AI SDK, OpenAI, and Vercel KV.
+  <img src="public/teddy.png" alt="TeddyCare Logo" width="200"/>
 </p>
 
 <p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a> ·
-  <a href="#authors"><strong>Authors</strong></a>
+  An AI-powered healthcare assistant that connects doctors and patients with personalized health insights.
 </p>
-<br/>
 
-## Features
+<p align="center">
+  <a href="https://teddycare.vercel.app/">
+    <strong>View Demo</strong>
+  </a>
+</p>
 
-- [Next.js](https://nextjs.org) App Router
-- React Server Components (RSCs), Suspense, and Server Actions
-- [Vercel AI SDK](https://sdk.vercel.ai/docs) for streaming chat UI
-- Support for OpenAI (default) with custom fine-tuned model
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - [Radix UI](https://radix-ui.com) for headless component primitives
-  - Icons from [Phosphor Icons](https://phosphoricons.com)
-- Chat History, rate limiting, and session storage with [Vercel KV](https://vercel.com/storage/kv)
-- [NextAuth.js](https://github.com/nextauthjs/next-auth) for authentication
-- Integration with Terra API for health data
+---
 
-## Model Providers
+## Overview
 
-This project uses a custom fine-tuned OpenAI model (`rohan/tune-gpt-4o`) as the default. The model is tailored to provide healthcare-specific responses for both doctors and patients.
+TeddyCare is a Next.js-based healthcare platform that leverages AI to provide personalized medical assistance. It features role-based dashboards for both doctors and patients, integrates with health tracking devices through Terra API, and uses a custom fine-tuned GPT-4o model for medical conversations.
 
-## Deploy Your Own
+## Key Features
 
-You can deploy your own version of TeddyCare to Vercel with one click:
+- **Dual User Roles**: Separate dashboards for doctors and patients with role-based routing
+- **AI-Powered Chat**: Custom fine-tuned OpenAI model (`rohan/tune-gpt-4o`) trained for healthcare conversations
+- **Health Data Integration**: Connect wearable devices and health trackers via Terra API
+- **Real-time Health Monitoring**: Track vital signs, sleep patterns, and other health metrics
+- **Secure Authentication**: Clerk-based authentication with organization-level access control
+- **Modern UI**: Built with Next.js 14, React Server Components, and Tailwind CSS
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FTeddyCare%2Fteddycare&project-name=teddycare&repository-name=teddycare&demo-title=TeddyCare&demo-description=AI-powered%20healthcare%20assistant&demo-url=https%3A%2F%2Fteddycare.vercel.app&demo-image=https%3A%2F%2Fteddycare.vercel.app%2Fopengraph-image.png)
+## Tech Stack
 
-## Creating a KV Database Instance
+- **Framework**: [Next.js 14](https://nextjs.org) with App Router
+- **AI**: [Vercel AI SDK](https://sdk.vercel.ai) with custom fine-tuned OpenAI model via [Tune Studio](https://tune.studio)
+- **Authentication**: [Clerk](https://clerk.com) with organization-based role management
+- **Database**: [Prisma](https://prisma.io) with SQLite (development) / PostgreSQL (production)
+- **Health Data**: [Terra API](https://tryterra.co) for wearable device integration
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com) with [Radix UI](https://radix-ui.com)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
 
-Follow the steps outlined in the [quick start guide](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) provided by Vercel. This guide will assist you in creating and configuring your KV database instance on Vercel, enabling your application to interact with it.
+## Prerequisites
 
-Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`) in the `.env` file with the appropriate credentials provided during the KV database setup.
+Before you begin, ensure you have the following installed and configured:
 
-## Running locally
+- **Node.js** 18.x or later
+- **pnpm** 8.6.3 or later (this project uses pnpm as its package manager)
+- **Clerk Account** with two organizations set up:
+  - Organization with slug `doctor`
+  - Organization with slug `patient`
+- **Tune Studio Account** with API access
+- **Terra API Account** for health data integration
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run TeddyCare. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+## Getting Started
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
+### 1. Clone the Repository
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+```bash
+git clone https://github.com/ithons/TeddyCare.git
+cd TeddyCare
+```
+
+### 2. Install Dependencies
+
+This project uses **pnpm** as its package manager:
+
+```bash
+pnpm install
+```
+
+> **Note**: Do not use npm or yarn. The project is configured specifically for pnpm.
+
+### 3. Set Up Environment Variables
+
+Create a `.env` file in the root directory by copying the example:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in the required values:
+
+```bash
+# Tune Studio API (OpenAI Proxy)
+TUNE_STUDIO_API_KEY=your_tune_studio_api_key
+
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET=your_clerk_secret_key
+
+# Terra API
+TERRA_DEV_ID=your_terra_dev_id
+TERRA_API_KEY=your_terra_api_key
+TERRA_WEBHOOK_SECRET=your_terra_webhook_secret
+
+# Database
+DATABASE_URL="file:./dev.db"
+```
+
+#### Getting Your API Keys
+
+- **Tune Studio**: Sign up at [tune.studio](https://tune.studio) and get your API key from [Account Settings](https://tune.studio/account/api-keys)
+- **Clerk**: Create an account at [clerk.com](https://clerk.com), then:
+  1. Create a new application
+  2. Create two organizations: one with slug `doctor` and one with slug `patient`
+  3. Copy your publishable key and secret key from the dashboard
+- **Terra API**: Sign up at [tryterra.co](https://tryterra.co) and obtain your API credentials
+
+### 4. Set Up the Database
+
+Initialize the Prisma database:
+
+```bash
+pnpm run setup
+```
+
+This will:
+- Install dependencies
+- Generate Prisma client
+- Create the SQLite database
+- Push the schema to the database
+
+### 5. Start the Development Server
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
+
+```
+TeddyCare/
+├── app/
+│   ├── api/                    # API routes
+│   │   └── terra/              # Terra API integration
+│   │       ├── generateWidgetSession/  # Widget session endpoint
+│   │       └── webhook/        # Terra webhook handler
+│   ├── chat/                   # AI chat interface
+│   ├── doctor/                 # Doctor dashboard pages
+│   │   ├── patient-info/       # Individual patient views
+│   │   ├── PatientList.tsx     # List of all patients
+│   │   └── AppointmentList.tsx # Upcoming appointments
+│   ├── patient/                # Patient dashboard pages
+│   │   └── components/         # Patient-specific components
+│   ├── layout.tsx              # Root layout with authentication
+│   └── page.tsx                # Landing page with org selector
+├── components/
+│   ├── ui/                     # Reusable UI components (shadcn/ui)
+│   ├── chat.tsx                # Main chat component
+│   └── header.tsx              # Navigation header
+├── lib/
+│   ├── chat/                   # Chat-related utilities
+│   │   ├── actions.tsx         # Server actions for AI chat
+│   │   └── userData.ts         # Sample health data
+│   └── hooks/                  # Custom React hooks
+├── prisma/
+│   └── schema.prisma           # Database schema
+└── public/                     # Static assets
+```
+
+## User Roles and Access Control
+
+TeddyCare uses Clerk's organization feature for role-based access control:
+
+### Doctor Role
+- Access the doctor dashboard at `/doctor`
+- View list of all patients
+- Access individual patient health records
+- Chat with AI for medical advice with access to patient data
+
+### Patient Role
+- Access the patient dashboard at `/patient`
+- Connect health tracking devices via Terra Widget
+- View personal health metrics and trends
+- Chat with AI for health guidance
+
+**Role Assignment**: Users are assigned roles based on which Clerk organization they belong to:
+- Members of the `doctor` organization → Doctor access
+- Members of the `patient` organization → Patient access
+
+## How It Works
+
+### Authentication Flow
+
+1. User signs in via Clerk
+2. Middleware checks user's organization membership
+3. User is redirected to appropriate dashboard based on organization slug
+
+### Health Data Integration
+
+```mermaid
+graph LR
+    A[Patient] -->|Connects Device| B[Terra Widget]
+    B -->|OAuth Flow| C[Terra API]
+    C -->|Webhook| D[TeddyCare API]
+    D -->|Store| E[Database]
+    E -->|Retrieve| F[AI Chat]
+    F -->|Personalized Advice| A
+```
+
+1. Patient connects their wearable device through Terra Widget
+2. Terra API authenticates and begins syncing health data
+3. Webhooks send health data to TeddyCare's API endpoint
+4. Data is stored in the database via Prisma
+5. AI chat system accesses health data to provide personalized medical advice
+
+### AI Chat System
+
+The chat uses a custom fine-tuned GPT-4o model (`rohan/tune-gpt-4o`) accessed through Tune Studio's proxy. The system prompt adapts based on user role:
+
+- **For Doctors**: Provides technical medical information and treatment suggestions
+- **For Patients**: Offers health advice in accessible language with diagnostic support
+
+## Available Scripts
+
+```bash
+# Development
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm start            # Start production server
+
+# Database
+pnpm setup            # Initial setup (install, generate, db push)
+pnpm db:studio        # Open Prisma Studio
+pnpm db:reset         # Reset database (WARNING: deletes all data)
+
+# Code Quality
+pnpm type-check       # Run TypeScript type checking
+pnpm format:write     # Format code with Prettier
+pnpm format:check     # Check code formatting
+
+# Utilities
+pnpm clean            # Remove .next and node_modules
+```
+
+## Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import your repository in [Vercel](https://vercel.com)
+3. Configure environment variables in Vercel dashboard
+4. Deploy
+
+**Important**: For production, switch from SQLite to PostgreSQL:
+- Add a PostgreSQL database (e.g., Vercel Postgres, Supabase)
+- Update `DATABASE_URL` in your environment variables
+
+### Environment Variables for Production
+
+Ensure all environment variables from `.env.example` are configured in your hosting platform.
+
+## Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For questions or issues:
+- Open an issue on GitHub
+- Check existing documentation in `/docs`
+- Review the [Setup Guide](SETUP.md) for detailed configuration instructions
+
+## Acknowledgments
+
+- Built with [Next.js](https://nextjs.org)
+- UI components from [shadcn/ui](https://ui.shadcn.com)
+- AI powered by [OpenAI](https://openai.com) via [Tune Studio](https://tune.studio)
+- Health data from [Terra API](https://tryterra.co)
+- Authentication by [Clerk](https://clerk.com)
+
+---
+
+<p align="center">Made with ❤️ for better healthcare</p>

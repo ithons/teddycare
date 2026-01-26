@@ -55,8 +55,6 @@ export function PatientForm() {
       height: values.height
     })
     setSubmitting(false)
-
-    console.log(values)
   }
 
   return (

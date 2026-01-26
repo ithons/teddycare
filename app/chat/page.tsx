@@ -6,7 +6,7 @@ import { getMissingKeys } from '@/app/actions'
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Next.js AI Chatbot'
+  title: 'Chat with Teddy'
 }
 
 export default async function IndexPage() {

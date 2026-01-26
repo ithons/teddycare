@@ -33,7 +33,22 @@ yarn-error.log*
 # turbo
 .turbo
 
+# environment variables
 .env
-.vercel
-.vscode
 .env*.local
+
+# vercel
+.vercel
+
+# IDE
+.vscode
+.idea
+
+# database
+prisma/dev.db
+prisma/dev.db-journal
+*.db
+*.db-journal
+
+# terra webhook data (if saved to filesystem)
+app/api/terra/*.json
